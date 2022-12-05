@@ -1,0 +1,3 @@
+= eazyPortal - Document Store
+
+This is _eazyPortal **Document Store**_ project.

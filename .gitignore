@@ -1,0 +1,15 @@
+### Gradle ###
+HELP.md
+.gradle/
+build/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+
+### Misc ###
+test.mv.db
+logs/
