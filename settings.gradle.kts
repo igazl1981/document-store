@@ -19,3 +19,15 @@ pluginManagement {
         }
     }
 }
+
+listOf(
+    "api",
+    "behemoth",
+    "client",
+    "dao",
+    "service",
+    "web"
+).forEach {
+    include(it)
+    project(":$it").name = "${rootProject.name}-$it"
+}
