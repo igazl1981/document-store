@@ -1,0 +1,11 @@
+
+spring:
+  profiles:
+    active:
+      - local
+
+eazyportal:
+  web:
+    publicEndpoints:
+      ALL:
+        - /**

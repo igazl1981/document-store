@@ -1,0 +1,9 @@
+.loadDataButton {
+    transform: translateX(-50%);
+}
+
+.loadDataWrapper {
+    left: 50%;
+    margin-top: 2em;
+    position: relative;
+}

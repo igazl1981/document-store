@@ -21,11 +21,7 @@ pluginManagement {
 }
 
 listOf(
-    "api",
-    "behemoth",
-    "client",
-    "dao",
-    "service",
+    "ui",
     "web"
 ).forEach {
     include(it)

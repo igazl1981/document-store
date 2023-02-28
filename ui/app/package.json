@@ -1,0 +1,22 @@
+{
+  "name": "@eazyportal/document-store-service-ui-app",
+  "homepage": ".",
+  "version": "0.0.1-SNAPSHOT",
+  "private": true,
+  "proxy": "http://localhost:8080",
+  "scripts": {
+    "clean": "fse remove --quiet ./build",
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "dependencies": {
+    "@eazyportal/document-store-service-ui-lib": "file:../lib"
+  },
+  "devDependencies": {
+    "@atao60/fse-cli": "*",
+    "react-scripts": "*"
+  },
+  "browserslist": [
+    "defaults"
+  ]
+}
