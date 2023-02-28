@@ -21,13 +21,8 @@ pluginManagement {
 }
 
 listOf(
-    "api",
-    "behemoth",
-    "client",
-    "dao",
-    "service",
-    "web",
-    "ui"
+    "ui",
+    "web"
 ).forEach {
     include(it)
     project(":$it").name = "${rootProject.name}-$it"
