@@ -26,7 +26,8 @@ listOf(
     "client",
     "dao",
     "service",
-    "web"
+    "web",
+    "ui"
 ).forEach {
     include(it)
     project(":$it").name = "${rootProject.name}-$it"

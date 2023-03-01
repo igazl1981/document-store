@@ -1,0 +1,3 @@
+[submodule "document-store-ui"]
+	path = ui
+	url = git@github.com:eazyportal/document-store-ui.git
