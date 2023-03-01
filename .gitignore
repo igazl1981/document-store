@@ -17,3 +17,6 @@ out/
 ### Misc ###
 test.mv.db
 logs/
+
+# exclude unit test saves
+save-path

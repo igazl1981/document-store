@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Max
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotNull
 import org.eazyportal.core.web.rest.controller.EazyRestController
+import org.eazyportal.documentstore.service.FileUploadFacade
 import org.hibernate.validator.constraints.Length
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.validation.annotation.Validated
@@ -21,7 +22,7 @@ import java.util.UUID
 @RestController
 @RequestMapping("/v1/documents")
 @Validated
-class FileUploadRestController : EazyRestController {
+class FileUploadRestController(private val fileUploadFacade: FileUploadFacade) : EazyRestController {
 
     @PostMapping(consumes = ["multipart/form-data"])
     @ResponseStatus(CREATED)
@@ -29,7 +30,7 @@ class FileUploadRestController : EazyRestController {
         @RequestPart("file") file: MultipartFile,
         @Valid @RequestPart("document") document: DocumentUploadRequest,
     ) {
-        println(document)
+        fileUploadFacade.uploadFile(file, document)
     }
 
 }
