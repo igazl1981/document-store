@@ -23,9 +23,6 @@ import java.util.UUID
 @Validated
 class FileUploadRestController : EazyRestController {
 
-    // TODO: When file is not sent org.springframework.web.multipart.support.MissingServletRequestPartException is thrown
-    // Should we handle it separately??? It results a 500 response which is not completely valid.
-    // TODO: Request is not validated on the JSON !!!!!!!
     @PostMapping(consumes = ["multipart/form-data"])
     @ResponseStatus(CREATED)
     fun uploadDocument(
@@ -38,12 +35,12 @@ class FileUploadRestController : EazyRestController {
 }
 
 data class DocumentUploadRequest(
-    @NotNull
+    @field:NotNull
     val memberId: UUID,
-    @NotNull
-    @Length(min = 5, max = 255)
+    @field:NotNull
+    @field:Length(min = 5, max = 255)
     val name: String,
-    @Length(min = 10, max = 50)
+    @field:Length(min = 10, max = 50)
     val documentType: String,
     val metadata: DocumentMetadata?,
 )
@@ -53,12 +50,12 @@ data class DocumentMetadata(
 )
 
 data class TaxReturnPeriod(
-    @NotNull
-    @Max(9999)
-    @Min(1900)
+    @field:NotNull
+    @field:Max(9999)
+    @field:Min(1900)
     val year: Int,
-    @Max(4)
-    @Min(1)
+    @field:Max(4)
+    @field:Min(1)
     val quarter: Int?,
     val month: Month?
 )
