@@ -1,3 +1,13 @@
 spring:
   profiles:
-    active: local
+    active:
+      - local
+
+eazyportal:
+  file-handler:
+    local:
+      save-path: documents
+  web:
+    publicEndpoints:
+      ALL:
+        - /**
