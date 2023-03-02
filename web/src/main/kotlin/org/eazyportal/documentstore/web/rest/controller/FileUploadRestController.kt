@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile
 import java.time.Month
 import java.util.UUID
 
-
 @RestController
 @RequestMapping("/v1/documents")
 @Validated

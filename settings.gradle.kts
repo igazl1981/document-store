@@ -21,8 +21,8 @@ pluginManagement {
 }
 
 listOf(
-    "ui",
     "service",
+    "ui",
     "web"
 ).forEach {
     include(it)
