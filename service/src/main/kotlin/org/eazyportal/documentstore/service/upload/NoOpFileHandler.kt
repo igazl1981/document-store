@@ -13,8 +13,12 @@ class NoOpFileHandler(private val filenameUtil: FilenameUtil) : FileHandler {
 
     private val logger = LoggerFactory.getLogger(NoOpFileHandler::class.java)
 
-    override fun handle(memberId: UUID, documentType: String, file: MultipartFile): String {
+    override fun save(memberId: UUID, documentType: String, file: MultipartFile): String {
         logger.info("NoOpFileHandler handles the ${file.originalFilename} for member: $memberId")
         return "${filenameUtil.getRandomFilename()}.txt"
+    }
+
+    override fun delete(memberId: UUID, documentType: String, filename: String) {
+        logger.info("NoOpFileHandler deletes the ${filename} for member: $memberId")
     }
 }

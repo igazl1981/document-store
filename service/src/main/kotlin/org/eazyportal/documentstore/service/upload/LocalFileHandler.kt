@@ -2,6 +2,7 @@ package org.eazyportal.documentstore.service.upload
 
 import org.eazyportal.documentstore.service.upload.error.FileSaveFailedException
 import org.eazyportal.documentstore.service.util.FilenameUtil
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Primary
 import org.springframework.context.annotation.Profile
@@ -23,18 +24,22 @@ import kotlin.io.path.notExists
 @Profile("local")
 class LocalFileHandler(
     @Value("\${eazyportal.file-handler.local.save-path}")
-    private val savePath: String,
-    private val filenameUtil: FilenameUtil
+    private val savePath: String, private val filenameUtil: FilenameUtil
 ) : FileHandler {
 
-    override fun handle(memberId: UUID, documentType: String, file: MultipartFile): String {
+    private val logger = LoggerFactory.getLogger(LocalFileHandler::class.java)
+
+    override fun save(memberId: UUID, documentType: String, file: MultipartFile): String {
+        logger.info("Saving file: ${file.originalFilename}")
         val extension = getOriginalExtension(file)
         val storageFilename = getStorageFilename(extension)
         val filePath = getAndCreateFilePath(memberId, documentType)
-
+        logger.info("Directory is created: $filePath")
+        val targetFile = getTargetFile(filePath, storageFilename)
         try {
-            file.transferTo(getTargetFile(filePath, storageFilename))
+            file.transferTo(targetFile)
         } catch (e: Exception) {
+            logger.error("Failed to save file: ${targetFile.absoluteFile}", e)
             when (e) {
                 is IOException, is IllegalStateException -> throw FileSaveFailedException(
                     filePath.toString() + file.originalFilename, e
@@ -43,6 +48,20 @@ class LocalFileHandler(
         }
 
         return storageFilename
+    }
+
+    override fun delete(memberId: UUID, documentType: String, filename: String) {
+        val filePath = getFilePath(memberId, documentType)
+        val targetFile = getTargetFile(filePath, filename)
+        deleteFile(targetFile)
+    }
+
+    private fun deleteFile(targetFile: File) {
+        try {
+            targetFile.delete()
+        } catch (e: Exception) {
+            logger.error("Failed to delete the file ${targetFile.absoluteFile}", e)
+        }
     }
 
     private fun getOriginalExtension(file: MultipartFile): String? =

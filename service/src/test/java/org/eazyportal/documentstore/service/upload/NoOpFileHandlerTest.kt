@@ -28,7 +28,7 @@ class NoOpFileHandlerTest {
         val file: MockMultipartFile = mock()
         whenever(filenameUtil.getRandomFilename()).thenReturn("random-filename")
 
-        val result = noOpFileHandler.handle(memberId, documentType, file)
+        val result = noOpFileHandler.save(memberId, documentType, file)
 
         assertThat(result).isEqualTo("random-filename.txt")
     }
