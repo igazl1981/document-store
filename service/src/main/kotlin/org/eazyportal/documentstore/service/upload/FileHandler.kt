@@ -16,6 +16,8 @@ import java.util.UUID
  */
 interface FileHandler {
 
-    fun handle(memberId: UUID, documentType: String, file: MultipartFile): String
+    fun save(memberId: UUID, documentType: String, file: MultipartFile): String
+
+    fun delete(memberId: UUID, documentType: String, filename: String)
 
 }
