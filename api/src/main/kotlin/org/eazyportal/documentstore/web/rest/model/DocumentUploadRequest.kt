@@ -1,6 +1,7 @@
 package org.eazyportal.documentstore.web.rest.model
 
 import jakarta.validation.constraints.NotNull
+import org.eazyportal.core.api.request.model.EazyRequest
 import org.hibernate.validator.constraints.Length
 import java.util.UUID
 
@@ -13,4 +14,4 @@ data class DocumentUploadRequest(
     @field:Length(min = 10, max = 50)
     val documentType: String,
     val metadata: Map<String, Any>?,
-)
+): EazyRequest

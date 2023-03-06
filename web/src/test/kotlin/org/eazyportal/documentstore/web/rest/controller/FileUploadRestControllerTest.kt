@@ -2,7 +2,6 @@ package org.eazyportal.documentstore.web.rest.controller
 
 import org.eazyportal.documentstore.service.FileUploadFacade
 import org.eazyportal.documentstore.test.utils.ModelUtils.getDocumentUploadRequest
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
