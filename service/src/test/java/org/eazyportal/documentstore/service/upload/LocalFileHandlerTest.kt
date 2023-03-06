@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.fail
 import org.eazyportal.documentstore.service.util.FilenameUtil
 import org.eazyportal.documentstore.test.utils.ModelUtils.documentType
 import org.eazyportal.documentstore.test.utils.ModelUtils.memberId
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -41,6 +40,7 @@ class LocalFileHandlerTest {
     fun `test handle should save the file and return saved filename with the original extension`() {
         val file: MockMultipartFile = mock()
         val captor = argumentCaptor<File>()
+
         whenever(file.originalFilename).thenReturn("mock-uploaded-file.txt")
         whenever(filenameUtil.getRandomFilename()).thenReturn("random-filename")
         doNothing().whenever(file).transferTo(captor.capture())
@@ -55,6 +55,7 @@ class LocalFileHandlerTest {
     fun `test handle should save the file and return saved filename without extension`() {
         val file: MockMultipartFile = mock()
         val captor = argumentCaptor<File>()
+
         whenever(file.originalFilename).thenReturn("mock-uploaded-file")
         whenever(filenameUtil.getRandomFilename()).thenReturn("random-filename")
         doNothing().whenever(file).transferTo(captor.capture())
@@ -83,4 +84,5 @@ class LocalFileHandlerTest {
             fail<String>("The test file can not be created!")
         }
     }
+
 }

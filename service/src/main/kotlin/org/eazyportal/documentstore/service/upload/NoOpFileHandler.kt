@@ -21,4 +21,5 @@ class NoOpFileHandler(private val filenameUtil: FilenameUtil) : FileHandler {
     override fun delete(memberId: UUID, documentType: String, filename: String) {
         logger.info("NoOpFileHandler deletes the ${filename} for member: $memberId")
     }
+
 }
