@@ -21,6 +21,7 @@ pluginManagement {
 }
 
 listOf(
+    "dao",
     "service",
     "ui",
     "web"
