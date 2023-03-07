@@ -21,7 +21,9 @@ pluginManagement {
 }
 
 listOf(
+    "api",
     "dao",
+    "test-fixtures",
     "service",
     "ui",
     "web"

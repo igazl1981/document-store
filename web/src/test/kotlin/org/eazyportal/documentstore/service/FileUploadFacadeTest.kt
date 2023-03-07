@@ -7,7 +7,6 @@ import org.eazyportal.documentstore.test.utils.ModelUtils
 import org.eazyportal.documentstore.test.utils.ModelUtils.documentType
 import org.eazyportal.documentstore.test.utils.ModelUtils.getDocument
 import org.eazyportal.documentstore.test.utils.ModelUtils.memberId
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks

@@ -1,10 +1,9 @@
 package org.eazyportal.documentstore.service.upload
 
 import org.assertj.core.api.Assertions.assertThat
+import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE
+import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.service.util.FilenameUtil
-import org.eazyportal.documentstore.test.utils.ModelUtils.documentType
-import org.eazyportal.documentstore.test.utils.ModelUtils.memberId
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
@@ -26,10 +25,12 @@ class NoOpFileHandlerTest {
     @Test
     fun `test handle`() {
         val file: MockMultipartFile = mock()
+
         whenever(filenameUtil.getRandomFilename()).thenReturn("random-filename")
 
-        val result = noOpFileHandler.save(memberId, documentType, file)
+        val result = noOpFileHandler.save(MEMBER_ID, DOCUMENT_TYPE, file)
 
         assertThat(result).isEqualTo("random-filename.txt")
     }
+
 }

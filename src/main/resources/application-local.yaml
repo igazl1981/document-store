@@ -1,3 +1,8 @@
+eazyportal:
+  file-handler:
+    local:
+      save-path: documents
+
 spring:
   data:
     mongodb:

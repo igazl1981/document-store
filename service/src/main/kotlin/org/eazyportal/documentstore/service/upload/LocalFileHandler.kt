@@ -27,22 +27,25 @@ class LocalFileHandler(
     private val savePath: String, private val filenameUtil: FilenameUtil
 ) : FileHandler {
 
-    private val logger = LoggerFactory.getLogger(LocalFileHandler::class.java)
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(LocalFileHandler::class.java)
+    }
 
     override fun save(memberId: UUID, documentType: String, file: MultipartFile): String {
-        logger.info("Saving file: ${file.originalFilename}")
+        LOGGER.info("Saving file: ${file.originalFilename}")
         val extension = getOriginalExtension(file)
         val storageFilename = getStorageFilename(extension)
         val filePath = getAndCreateFilePath(memberId, documentType)
-        logger.info("Directory is created: $filePath")
+        LOGGER.info("Directory is created: $filePath")
         val targetFile = getTargetFile(filePath, storageFilename)
         try {
             file.transferTo(targetFile)
         } catch (e: Exception) {
-            logger.error("Failed to save file: ${targetFile.absoluteFile}", e)
+            LOGGER.error("Failed to save file: ${targetFile.absoluteFile}", e)
             when (e) {
                 is IOException, is IllegalStateException -> throw FileSaveFailedException(
-                    filePath.toString() + file.originalFilename, e
+                    "$filePath${file.originalFilename}",
+                    e
                 )
             }
         }
@@ -60,7 +63,7 @@ class LocalFileHandler(
         try {
             targetFile.delete()
         } catch (e: Exception) {
-            logger.error("Failed to delete the file ${targetFile.absoluteFile}", e)
+            LOGGER.error("Failed to delete the file ${targetFile.absoluteFile}", e)
         }
     }
 
@@ -85,4 +88,5 @@ class LocalFileHandler(
 
     private fun getTargetFile(filePath: Path, storageFilename: String) =
         File(filePath.absolutePathString() + File.separator + storageFilename)
+
 }

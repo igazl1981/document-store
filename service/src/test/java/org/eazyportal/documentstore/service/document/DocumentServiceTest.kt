@@ -2,11 +2,10 @@ package org.eazyportal.documentstore.service.document
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration
-import org.eazyportal.documentstore.dao.StoredDocument
-import org.eazyportal.documentstore.dao.StoredDocumentRepository
-import org.eazyportal.documentstore.test.utils.ModelUtils.getDocument
-import org.eazyportal.documentstore.test.utils.ModelUtils.getStoredDocument
-import org.junit.jupiter.api.Assertions.*
+import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.STORED_DOCUMENT
+import org.eazyportal.documentstore.dao.model.StoredDocumentEntity
+import org.eazyportal.documentstore.dao.repository.StoredDocumentRepository
+import org.eazyportal.documentstore.service.document.model.DocumentFixtureValues.DOCUMENT
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
@@ -29,16 +28,14 @@ class DocumentServiceTest {
     @Test
     fun `test saveDocument`() {
         val testStartTime = LocalDateTime.now()
-        val document = getDocument()
-        val savedDocument = getStoredDocument()
-        val captor = argumentCaptor<StoredDocument>()
-        whenever(storedDocumentRepository.save(captor.capture())).thenReturn(savedDocument)
+        val captor = argumentCaptor<StoredDocumentEntity>()
+        whenever(storedDocumentRepository.save(captor.capture())).thenReturn(STORED_DOCUMENT)
 
-        documentService.saveDocument(document)
+        documentService.saveDocument(DOCUMENT)
 
         verify(storedDocumentRepository).save(captor.capture())
         val newStoredDocument = captor.firstValue
-        assertThat(newStoredDocument).usingRecursiveComparison(getRecursionConfig()).isEqualTo(savedDocument)
+        assertThat(newStoredDocument).usingRecursiveComparison(getRecursionConfig()).isEqualTo(STORED_DOCUMENT)
         assertThat(newStoredDocument.uploadedAt).isAfter(testStartTime)
         assertThat(newStoredDocument.modifiedAt).isAfter(testStartTime)
     }
