@@ -2,8 +2,9 @@ package org.eazyportal.documentstore.service.document
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration
-import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.STORED_DOCUMENT
+import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntity
+import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.STORED_DOCUMENT
 import org.eazyportal.documentstore.dao.repository.StoredDocumentRepository
 import org.eazyportal.documentstore.service.document.model.DocumentFixtureValues.DOCUMENT
 import org.junit.jupiter.api.Test
@@ -14,6 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.springframework.data.mongodb.core.MongoTemplate
+import org.springframework.data.mongodb.core.query.Criteria
+import org.springframework.data.mongodb.core.query.Query
 import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
@@ -21,6 +25,9 @@ class DocumentServiceTest {
 
     @Mock
     private lateinit var storedDocumentRepository: StoredDocumentRepository
+
+    @Mock
+    private lateinit var mongoTemplate: MongoTemplate
 
     @InjectMocks
     private lateinit var documentService: DocumentService
@@ -38,6 +45,31 @@ class DocumentServiceTest {
         assertThat(newStoredDocument).usingRecursiveComparison(getRecursionConfig()).isEqualTo(STORED_DOCUMENT)
         assertThat(newStoredDocument.uploadedAt).isAfter(testStartTime)
         assertThat(newStoredDocument.modifiedAt).isAfter(testStartTime)
+    }
+
+    @Test
+    fun `test getAllDocuments should use query with owner only when filterOptions is empty`() {
+        val query = Query(Criteria.where("owner").`is`(MEMBER_ID))
+        val storedDocuments = listOf(STORED_DOCUMENT)
+        whenever(mongoTemplate.find(query, StoredDocumentEntity::class.java)).thenReturn(storedDocuments)
+
+        val result = documentService.getAllDocuments(MEMBER_ID, emptyMap())
+
+        verify(mongoTemplate).find(query, StoredDocumentEntity::class.java)
+        assertThat(result).isEqualTo(storedDocuments)
+    }
+
+    @Test
+    fun `test getAllDocuments should use query with owner and filter options when filterOptions has values`() {
+        val query = Query(Criteria.where("owner").`is`(MEMBER_ID).and("filter1").`is`("value1"))
+        val storedDocuments = listOf(STORED_DOCUMENT)
+        val filterOptions = mapOf("filter1" to "value1")
+        whenever(mongoTemplate.find(query, StoredDocumentEntity::class.java)).thenReturn(storedDocuments)
+
+        val result = documentService.getAllDocuments(MEMBER_ID, filterOptions)
+
+        verify(mongoTemplate).find(query, StoredDocumentEntity::class.java)
+        assertThat(result).isEqualTo(storedDocuments)
     }
 
     private fun getRecursionConfig() =
