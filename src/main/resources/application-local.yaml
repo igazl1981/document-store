@@ -11,3 +11,12 @@ spring:
       database: documentStore
       username: documentStore
       password: DocumentStoreAdmin
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG
