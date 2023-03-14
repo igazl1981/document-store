@@ -61,7 +61,7 @@ class DocumentServiceTest {
 
     @Test
     fun `test getAllDocuments should use query with owner and filter options when filterOptions has values`() {
-        val query = Query(Criteria.where("owner").`is`(MEMBER_ID).and("filter1").`is`("value1"))
+        val query = Query(Criteria.where("owner").`is`(MEMBER_ID).andOperator(Criteria.where("filter1").`is`("value1")))
         val storedDocuments = listOf(STORED_DOCUMENT)
         val filterOptions = mapOf("filter1" to "value1")
         whenever(mongoTemplate.find(query, StoredDocumentEntity::class.java)).thenReturn(storedDocuments)
