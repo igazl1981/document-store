@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 import java.util.UUID
 
 @Document("storedDocuments")
-class StoredDocumentEntity(
+data class StoredDocumentEntity(
     val documentType: String,
     var displayName: String,
     val savedFilename: String,

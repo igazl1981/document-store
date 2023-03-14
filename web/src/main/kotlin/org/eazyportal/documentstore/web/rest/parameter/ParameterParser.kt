@@ -2,6 +2,8 @@ package org.eazyportal.documentstore.web.rest.parameter
 
 import org.springframework.stereotype.Service
 
+private const val FIELD_PREFIX_LENGTH = 6
+
 @Service
 class ParameterParser {
 
@@ -18,5 +20,5 @@ class ParameterParser {
 
     private fun valueIsNotEmpty(entry: Map.Entry<String, String>) = entry.value.isNotBlank()
 
-    private fun getFieldName(entry: Map.Entry<String, String>) = entry.key.substring(6)
+    private fun getFieldName(entry: Map.Entry<String, String>) = entry.key.substring(FIELD_PREFIX_LENGTH)
 }
