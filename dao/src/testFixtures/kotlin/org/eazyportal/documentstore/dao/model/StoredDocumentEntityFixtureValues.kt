@@ -8,6 +8,8 @@ import org.eazyportal.documentstore.CommonFixtureValues.METADATA
 import org.eazyportal.documentstore.CommonFixtureValues.ORIGINAL_FILENAME
 import org.eazyportal.documentstore.CommonFixtureValues.SAVED_FILENAME
 import org.eazyportal.documentstore.dao.model.DocumentStatus.PENDING
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import java.time.Instant
 import java.time.LocalDateTime
 import java.util.Date
@@ -27,5 +29,7 @@ object StoredDocumentEntityFixtureValues {
         modifiedAt = LocalDateTime.parse("2023-03-04T11:00:00"),
         uploadedAt = LocalDateTime.parse("2023-03-04T10:00:00"),
     )
+
+    val DEFAULT_PAGEABLE = PageRequest.of(0, 13, Sort.unsorted())
 
 }

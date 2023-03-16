@@ -4,16 +4,18 @@ import org.eazyportal.documentstore.dao.model.DocumentStatus.PENDING
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntity
 import org.eazyportal.documentstore.dao.repository.StoredDocumentRepository
 import org.eazyportal.documentstore.service.document.model.Document
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
+import org.springframework.data.support.PageableExecutionUtils
 import org.springframework.stereotype.Service
 import java.util.UUID
 
 @Service
 class DocumentService(
-    private val storedDocumentRepository: StoredDocumentRepository,
-    private val mongoTemplate: MongoTemplate
+    private val storedDocumentRepository: StoredDocumentRepository, private val mongoTemplate: MongoTemplate
 ) {
 
     fun saveDocument(document: Document) {
@@ -31,10 +33,19 @@ class DocumentService(
         storedDocumentRepository.save(storedDocument)
     }
 
-    fun getAllDocuments(memberId: UUID, filterOptions: Map<String, String>): List<StoredDocumentEntity> {
+    fun getAllDocuments(
+        memberId: UUID, filterOptions: Map<String, String>, pageable: Pageable
+    ): Page<StoredDocumentEntity> {
         val query = getQuery(memberId, filterOptions)
-        return mongoTemplate.find(query, StoredDocumentEntity::class.java)
+        val pagedDocuments = findPageOfStoredDocumentEntities(query, pageable)
+        return PageableExecutionUtils.getPage(pagedDocuments, pageable) {
+            mongoTemplate.count(query.limit(-1).skip(-1), StoredDocumentEntity::class.java)
+        }
     }
+
+    private fun findPageOfStoredDocumentEntities(
+        query: Query, pageable: Pageable
+    ): List<StoredDocumentEntity> = mongoTemplate.find(query.with(pageable), StoredDocumentEntity::class.java)
 
     private fun getQuery(memberId: UUID, filterOptions: Map<String, String>): Query {
         val filter = getCompleteFilter(memberId, filterOptions)
