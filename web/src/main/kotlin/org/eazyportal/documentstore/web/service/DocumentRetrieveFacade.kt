@@ -1,8 +1,8 @@
-package org.eazyportal.documentstore.service
+package org.eazyportal.documentstore.web.service
 
 import org.eazyportal.documentstore.service.document.DocumentService
-import org.eazyportal.documentstore.service.transformer.DocumentTransformer
 import org.eazyportal.documentstore.web.rest.model.StoredDocument
+import org.eazyportal.documentstore.web.service.transformer.DocumentTransformer
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service

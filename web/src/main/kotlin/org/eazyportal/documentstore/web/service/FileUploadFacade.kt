@@ -1,9 +1,9 @@
-package org.eazyportal.documentstore.service
+package org.eazyportal.documentstore.web.service
 
 import org.eazyportal.documentstore.service.document.DocumentService
-import org.eazyportal.documentstore.service.transformer.DocumentTransformer
 import org.eazyportal.documentstore.service.upload.FileHandler
 import org.eazyportal.documentstore.web.rest.model.DocumentUploadRequest
+import org.eazyportal.documentstore.web.service.transformer.DocumentTransformer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile

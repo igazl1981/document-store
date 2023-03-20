@@ -2,8 +2,8 @@ package org.eazyportal.documentstore.web.rest.controller
 
 import jakarta.validation.Valid
 import org.eazyportal.core.web.rest.controller.EazyRestController
-import org.eazyportal.documentstore.service.FileUploadFacade
 import org.eazyportal.documentstore.web.rest.model.DocumentUploadRequest
+import org.eazyportal.documentstore.web.service.FileUploadFacade
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.PostMapping

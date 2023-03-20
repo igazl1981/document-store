@@ -1,8 +1,8 @@
 package org.eazyportal.documentstore.web.rest.controller
 
-import org.eazyportal.documentstore.service.DocumentRetrieveFacade
 import org.eazyportal.documentstore.web.rest.model.StoredDocument
 import org.eazyportal.documentstore.web.rest.parameter.ParameterParser
+import org.eazyportal.documentstore.web.service.DocumentRetrieveFacade
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.GetMapping

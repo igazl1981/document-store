@@ -1,12 +1,12 @@
-package org.eazyportal.documentstore.service
+package org.eazyportal.documentstore.web.service
 
 import org.eazyportal.documentstore.service.document.DocumentService
-import org.eazyportal.documentstore.service.transformer.DocumentTransformer
 import org.eazyportal.documentstore.service.upload.FileHandler
 import org.eazyportal.documentstore.test.utils.ModelUtils
 import org.eazyportal.documentstore.test.utils.ModelUtils.documentType
 import org.eazyportal.documentstore.test.utils.ModelUtils.getDocument
 import org.eazyportal.documentstore.test.utils.ModelUtils.memberId
+import org.eazyportal.documentstore.web.service.transformer.DocumentTransformer
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks

@@ -3,9 +3,9 @@ package org.eazyportal.documentstore.web.rest.controller
 import org.assertj.core.api.Assertions.assertThat
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.DEFAULT_PAGEABLE
-import org.eazyportal.documentstore.service.DocumentRetrieveFacade
 import org.eazyportal.documentstore.test.utils.ModelUtils.getStoredDocument
 import org.eazyportal.documentstore.web.rest.parameter.ParameterParser
+import org.eazyportal.documentstore.web.service.DocumentRetrieveFacade
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
