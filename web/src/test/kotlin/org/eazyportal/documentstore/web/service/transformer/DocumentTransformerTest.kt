@@ -1,8 +1,8 @@
-package org.eazyportal.documentstore.service.transformer
+package org.eazyportal.documentstore.web.service.transformer
 
 import org.assertj.core.api.Assertions.assertThat
 import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_NAME
-import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE
+import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_NAME
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.CommonFixtureValues.METADATA
 import org.eazyportal.documentstore.CommonFixtureValues.ORIGINAL_FILENAME
@@ -47,7 +47,7 @@ class DocumentTransformerTest {
 
         val expected = StoredDocument(
             id = "640316a00000000000000000",
-            documentType = DOCUMENT_TYPE,
+            documentType = DOCUMENT_TYPE_NAME,
             displayName = DOCUMENT_NAME,
             savedFilename = SAVED_FILENAME,
             originalFilename = ORIGINAL_FILENAME,

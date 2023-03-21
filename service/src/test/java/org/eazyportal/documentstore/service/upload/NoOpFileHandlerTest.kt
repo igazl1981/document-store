@@ -1,7 +1,7 @@
 package org.eazyportal.documentstore.service.upload
 
 import org.assertj.core.api.Assertions.assertThat
-import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE
+import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_NAME
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.service.util.FilenameUtil
 import org.junit.jupiter.api.Test
@@ -28,7 +28,7 @@ class NoOpFileHandlerTest {
 
         whenever(filenameUtil.getRandomFilename()).thenReturn("random-filename")
 
-        val result = noOpFileHandler.save(MEMBER_ID, DOCUMENT_TYPE, file)
+        val result = noOpFileHandler.save(MEMBER_ID, DOCUMENT_TYPE_NAME, file)
 
         assertThat(result).isEqualTo("random-filename.txt")
     }

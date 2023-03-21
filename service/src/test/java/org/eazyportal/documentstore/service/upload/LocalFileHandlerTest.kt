@@ -2,7 +2,7 @@ package org.eazyportal.documentstore.service.upload
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
-import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE
+import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_NAME
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.service.util.FilenameUtil
 import org.junit.jupiter.api.BeforeEach
@@ -45,9 +45,9 @@ class LocalFileHandlerTest {
         whenever(filenameUtil.getRandomFilename()).thenReturn("random-filename")
         doNothing().whenever(file).transferTo(captor.capture())
 
-        val result = localFileHandler.save(MEMBER_ID, DOCUMENT_TYPE, file)
+        val result = localFileHandler.save(MEMBER_ID, DOCUMENT_TYPE_NAME, file)
 
-        assertThat(captor.firstValue.absoluteFile.endsWith("$savePath/$MEMBER_ID/$DOCUMENT_TYPE/random-filename.txt"))
+        assertThat(captor.firstValue.absoluteFile.endsWith("$savePath/$MEMBER_ID/$DOCUMENT_TYPE_NAME/random-filename.txt"))
             .isTrue
 
         assertThat(result).isEqualTo("random-filename.txt")
@@ -62,9 +62,9 @@ class LocalFileHandlerTest {
         whenever(filenameUtil.getRandomFilename()).thenReturn("random-filename")
         doNothing().whenever(file).transferTo(captor.capture())
 
-        val result = localFileHandler.save(MEMBER_ID, DOCUMENT_TYPE, file)
+        val result = localFileHandler.save(MEMBER_ID, DOCUMENT_TYPE_NAME, file)
 
-        assertThat(captor.firstValue.absoluteFile.endsWith("$savePath/$MEMBER_ID/$DOCUMENT_TYPE/random-filename"))
+        assertThat(captor.firstValue.absoluteFile.endsWith("$savePath/$MEMBER_ID/$DOCUMENT_TYPE_NAME/random-filename"))
             .isTrue
 
         assertThat(result).isEqualTo("random-filename")
@@ -72,10 +72,10 @@ class LocalFileHandlerTest {
 
     @Test
     fun `test delete`() {
-        val testFilePath = Paths.get("save-path", MEMBER_ID.toString(), DOCUMENT_TYPE, "sample.txt")
+        val testFilePath = Paths.get("save-path", MEMBER_ID.toString(), DOCUMENT_TYPE_NAME, "sample.txt")
         createTestFile(testFilePath)
 
-        localFileHandler.delete(MEMBER_ID, DOCUMENT_TYPE, "sample.txt")
+        localFileHandler.delete(MEMBER_ID, DOCUMENT_TYPE_NAME, "sample.txt")
 
         assertThat(testFilePath.exists()).isFalse
     }

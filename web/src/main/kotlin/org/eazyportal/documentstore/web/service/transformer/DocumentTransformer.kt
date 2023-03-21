@@ -1,4 +1,4 @@
-package org.eazyportal.documentstore.service.transformer
+package org.eazyportal.documentstore.web.service.transformer
 
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntity
 import org.eazyportal.documentstore.service.document.model.Document
