@@ -4,8 +4,6 @@ import org.eazyportal.documentstore.dao.model.DocumentStatus
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class DocumentListResponse(val storedDocuments: List<StoredDocument>)
-
 data class StoredDocument(
     val id: String,
     val documentType: String?,

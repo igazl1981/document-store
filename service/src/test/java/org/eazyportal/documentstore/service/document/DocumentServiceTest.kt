@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntity
+import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.DEFAULT_PAGEABLE
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.STORED_DOCUMENT
 import org.eazyportal.documentstore.dao.repository.StoredDocumentRepository
 import org.eazyportal.documentstore.service.document.model.DocumentFixtureValues.DOCUMENT
@@ -51,12 +52,13 @@ class DocumentServiceTest {
     fun `test getAllDocuments should use query with owner only when filterOptions is empty`() {
         val query = Query(Criteria.where("owner").`is`(MEMBER_ID))
         val storedDocuments = listOf(STORED_DOCUMENT)
-        whenever(mongoTemplate.find(query, StoredDocumentEntity::class.java)).thenReturn(storedDocuments)
+        whenever(mongoTemplate.find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java)).thenReturn(storedDocuments)
 
-        val result = documentService.getAllDocuments(MEMBER_ID, emptyMap())
+        val result = documentService.getAllDocuments(MEMBER_ID, emptyMap(), DEFAULT_PAGEABLE)
 
-        verify(mongoTemplate).find(query, StoredDocumentEntity::class.java)
-        assertThat(result).isEqualTo(storedDocuments)
+        verify(mongoTemplate).find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java)
+        assertThat(result.content).isEqualTo(storedDocuments)
+        assertThat(result.pageable).isEqualTo(DEFAULT_PAGEABLE)
     }
 
     @Test
@@ -64,12 +66,13 @@ class DocumentServiceTest {
         val query = Query(Criteria.where("owner").`is`(MEMBER_ID).andOperator(Criteria.where("filter1").`is`("value1")))
         val storedDocuments = listOf(STORED_DOCUMENT)
         val filterOptions = mapOf("filter1" to "value1")
-        whenever(mongoTemplate.find(query, StoredDocumentEntity::class.java)).thenReturn(storedDocuments)
+        whenever(mongoTemplate.find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java)).thenReturn(storedDocuments)
 
-        val result = documentService.getAllDocuments(MEMBER_ID, filterOptions)
+        val result = documentService.getAllDocuments(MEMBER_ID, filterOptions, DEFAULT_PAGEABLE)
 
-        verify(mongoTemplate).find(query, StoredDocumentEntity::class.java)
-        assertThat(result).isEqualTo(storedDocuments)
+        verify(mongoTemplate).find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java)
+        assertThat(result.content).isEqualTo(storedDocuments)
+        assertThat(result.pageable).isEqualTo(DEFAULT_PAGEABLE)
     }
 
     private fun getRecursionConfig() =

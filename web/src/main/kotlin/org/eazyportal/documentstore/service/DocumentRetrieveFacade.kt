@@ -3,6 +3,8 @@ package org.eazyportal.documentstore.service
 import org.eazyportal.documentstore.service.document.DocumentService
 import org.eazyportal.documentstore.service.transformer.DocumentTransformer
 import org.eazyportal.documentstore.web.rest.model.StoredDocument
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -11,6 +13,6 @@ class DocumentRetrieveFacade(
     private val documentService: DocumentService, private val documentTransformer: DocumentTransformer
 ) {
 
-    fun getAllDocuments(memberId: UUID, filterOptions: Map<String, String>): List<StoredDocument> =
-        documentService.getAllDocuments(memberId, filterOptions).map(documentTransformer::toDto)
+    fun getAllDocuments(memberId: UUID, filterOptions: Map<String, String>, pageable: Pageable): Page<StoredDocument> =
+        documentService.getAllDocuments(memberId, filterOptions, pageable).map(documentTransformer::toDto)
 }

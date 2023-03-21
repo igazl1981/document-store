@@ -1,6 +1,7 @@
 package org.eazyportal.documentstore.service
 
 import org.assertj.core.api.Assertions.assertThat
+import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.DEFAULT_PAGEABLE
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.STORED_DOCUMENT
 import org.eazyportal.documentstore.service.document.DocumentService
 import org.eazyportal.documentstore.service.transformer.DocumentTransformer
@@ -14,6 +15,7 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
+import org.springframework.data.domain.PageImpl
 
 @ExtendWith(MockitoExtension::class)
 class DocumentRetrieveFacadeTest {
@@ -30,13 +32,15 @@ class DocumentRetrieveFacadeTest {
     @Test
     fun `test getAllDocuments`() {
         val filterOptions = mapOf("filter1" to "value1")
-        whenever(documentService.getAllDocuments(memberId, filterOptions)).thenReturn(listOf(STORED_DOCUMENT))
+        val pagedStoredDocuments = PageImpl(listOf(STORED_DOCUMENT))
+        whenever(documentService.getAllDocuments(memberId, filterOptions, DEFAULT_PAGEABLE))
+            .thenReturn(pagedStoredDocuments)
         whenever(documentTransformer.toDto(STORED_DOCUMENT)).thenReturn(getStoredDocument())
 
-        val result = documentRetrieveFacade.getAllDocuments(memberId, filterOptions)
+        val result = documentRetrieveFacade.getAllDocuments(memberId, filterOptions, DEFAULT_PAGEABLE)
 
-        verify(documentService).getAllDocuments(memberId, filterOptions)
+        verify(documentService).getAllDocuments(memberId, filterOptions, DEFAULT_PAGEABLE)
         verify(documentTransformer).toDto(STORED_DOCUMENT)
-        assertThat(result).isEqualTo(listOf(getStoredDocument()))
+        assertThat(result.content).isEqualTo(listOf(getStoredDocument()))
     }
 }
