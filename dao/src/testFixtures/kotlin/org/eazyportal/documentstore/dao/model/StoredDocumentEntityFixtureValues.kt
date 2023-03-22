@@ -2,12 +2,12 @@ package org.eazyportal.documentstore.dao.model
 
 import org.bson.types.ObjectId
 import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_NAME
-import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_NAME
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.CommonFixtureValues.METADATA
 import org.eazyportal.documentstore.CommonFixtureValues.ORIGINAL_FILENAME
 import org.eazyportal.documentstore.CommonFixtureValues.SAVED_FILENAME
 import org.eazyportal.documentstore.dao.model.DocumentStatus.PENDING
+import org.eazyportal.documentstore.dao.model.DocumentTypeEntityFixtureValues.DOCUMENT_TYPE
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import java.time.Instant
@@ -17,7 +17,7 @@ import java.util.Date
 object StoredDocumentEntityFixtureValues {
 
     val STORED_DOCUMENT = StoredDocumentEntity(
-        documentType = DOCUMENT_TYPE_NAME,
+        documentType = DOCUMENT_TYPE,
         displayName = DOCUMENT_NAME,
         savedFilename = SAVED_FILENAME,
         originalFilename = ORIGINAL_FILENAME,

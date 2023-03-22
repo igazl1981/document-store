@@ -1,8 +1,10 @@
 package org.eazyportal.documentstore.service.document
 
 import org.eazyportal.documentstore.dao.model.DocumentStatus.PENDING
+import org.eazyportal.documentstore.dao.model.DocumentTypeEntity
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntity
 import org.eazyportal.documentstore.dao.repository.StoredDocumentRepository
+import org.eazyportal.documentstore.service.document.exception.MissingDocumentTypeException
 import org.eazyportal.documentstore.service.document.model.Document
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -15,12 +17,15 @@ import java.util.UUID
 
 @Service
 class DocumentService(
-    private val storedDocumentRepository: StoredDocumentRepository, private val mongoTemplate: MongoTemplate
+    private val documentTypeService: DocumentTypeService,
+    private val storedDocumentRepository: StoredDocumentRepository,
+    private val mongoTemplate: MongoTemplate,
 ) {
 
     fun saveDocument(document: Document) {
+        val documentType = findDocumentTypeEntity(document.documentTypeId)
         val storedDocument = StoredDocumentEntity(
-            documentType = document.documentType,
+            documentType = documentType,
             displayName = document.name,
             savedFilename = document.savedFilename,
             originalFilename = document.originalFilename,
@@ -41,6 +46,10 @@ class DocumentService(
         return PageableExecutionUtils.getPage(pagedDocuments, pageable) {
             mongoTemplate.count(query.limit(-1).skip(-1), StoredDocumentEntity::class.java)
         }
+    }
+
+    private fun findDocumentTypeEntity(documentTypeId: String): DocumentTypeEntity {
+        return documentTypeService.getById(documentTypeId) ?: throw MissingDocumentTypeException(documentTypeId)
     }
 
     private fun findPageOfStoredDocumentEntities(

@@ -8,6 +8,7 @@ import org.eazyportal.documentstore.test.utils.ModelUtils.getDocument
 import org.eazyportal.documentstore.test.utils.ModelUtils.memberId
 import org.eazyportal.documentstore.web.service.transformer.DocumentTransformer
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -61,7 +62,7 @@ class FileUploadFacadeTest {
         whenever(documentService.saveDocument(document)).thenThrow(RuntimeException("Save failed."))
         doNothing().whenever(fileHandler).delete(memberId, documentType, savedFilename)
 
-        fileUploadFacade.uploadFile(file, request)
+        assertThrows<RuntimeException> {  fileUploadFacade.uploadFile(file, request) }
 
         verify(fileHandler).save(memberId, documentType, file)
         verify(documentTransformer).toDocument(request, savedFilename, file)

@@ -11,7 +11,7 @@ data class DocumentUploadRequest(
     @field:NotNull
     @field:Length(min = 5, max = 255)
     val name: String,
-    @field:Length(min = 10, max = 50)
-    val documentType: String,
+    @field:Length(min = 5, max = 50)
+    val documentTypeId: String,
     val metadata: Map<String, Any>?,
 ): EazyRequest
