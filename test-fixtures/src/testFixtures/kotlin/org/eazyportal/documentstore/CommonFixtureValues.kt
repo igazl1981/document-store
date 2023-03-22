@@ -4,6 +4,8 @@ import java.util.UUID
 
 object CommonFixtureValues {
 
+    const val INVALID_ID = "INVALID"
+    const val DOCUMENT_ID_STRING = "6419fe9263230d14cbbaf826"
     const val DOCUMENT_NAME = "document-name"
     const val DOCUMENT_TYPE_NAME = "document-type"
     const val DOCUMENT_TYPE_ID = "6418a7917f9f210986d50ed2"

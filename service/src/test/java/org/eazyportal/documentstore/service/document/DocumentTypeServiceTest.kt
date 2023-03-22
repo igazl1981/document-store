@@ -4,10 +4,12 @@ import org.assertj.core.api.Assertions
 import org.bson.types.ObjectId
 import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_ID
 import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_NAME
+import org.eazyportal.documentstore.CommonFixtureValues.INVALID_ID
 import org.eazyportal.documentstore.dao.model.DocumentTypeEntity
 import org.eazyportal.documentstore.dao.model.DocumentTypeEntityFixtureValues.DOCUMENT_TYPE
 import org.eazyportal.documentstore.dao.repository.DocumentTypeRepository
 import org.eazyportal.documentstore.service.document.exception.DocumentTypeNotFoundException
+import org.eazyportal.documentstore.service.document.exception.InvalidIdRepresentationException
 import org.eazyportal.documentstore.service.document.model.DocumentFixtureValues.DOCUMENT_TYPE_UPDATED_NAME
 import org.eazyportal.documentstore.service.document.model.DocumentFixtureValues.TYPE_INSERT
 import org.eazyportal.documentstore.service.document.model.DocumentFixtureValues.TYPE_UPDATE
@@ -20,6 +22,7 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import java.util.Optional
@@ -54,6 +57,14 @@ class DocumentTypeServiceTest {
         verify(documentTypeRepository).findById(id)
         val expected = DOCUMENT_TYPE
         Assertions.assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test getById should throw exception when ID is invalid`() {
+
+        assertThrows<InvalidIdRepresentationException> { documentTypeService.getById(INVALID_ID) }
+
+        verifyNoInteractions(documentTypeRepository)
     }
 
     @Test
