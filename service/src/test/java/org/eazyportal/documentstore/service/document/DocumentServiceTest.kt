@@ -2,7 +2,9 @@ package org.eazyportal.documentstore.service.document
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration
+import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_ID
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
+import org.eazyportal.documentstore.dao.model.DocumentTypeEntityFixtureValues.DOCUMENT_TYPE
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntity
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.DEFAULT_PAGEABLE
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.STORED_DOCUMENT
@@ -15,6 +17,7 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -23,6 +26,9 @@ import java.time.LocalDateTime
 
 @ExtendWith(MockitoExtension::class)
 class DocumentServiceTest {
+
+    @Mock
+    private lateinit var documentTypeService: DocumentTypeService
 
     @Mock
     private lateinit var storedDocumentRepository: StoredDocumentRepository
@@ -38,6 +44,7 @@ class DocumentServiceTest {
         val testStartTime = LocalDateTime.now()
         val captor = argumentCaptor<StoredDocumentEntity>()
         whenever(storedDocumentRepository.save(captor.capture())).thenReturn(STORED_DOCUMENT)
+        whenever(documentTypeService.getById(DOCUMENT_TYPE_ID)).thenReturn(DOCUMENT_TYPE)
 
         documentService.saveDocument(DOCUMENT)
 
@@ -57,6 +64,7 @@ class DocumentServiceTest {
         val result = documentService.getAllDocuments(MEMBER_ID, emptyMap(), DEFAULT_PAGEABLE)
 
         verify(mongoTemplate).find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java)
+        verifyNoInteractions(documentTypeService, storedDocumentRepository)
         assertThat(result.content).isEqualTo(storedDocuments)
         assertThat(result.pageable).isEqualTo(DEFAULT_PAGEABLE)
     }
@@ -71,6 +79,7 @@ class DocumentServiceTest {
         val result = documentService.getAllDocuments(MEMBER_ID, filterOptions, DEFAULT_PAGEABLE)
 
         verify(mongoTemplate).find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java)
+        verifyNoInteractions(documentTypeService, storedDocumentRepository)
         assertThat(result.content).isEqualTo(storedDocuments)
         assertThat(result.pageable).isEqualTo(DEFAULT_PAGEABLE)
     }

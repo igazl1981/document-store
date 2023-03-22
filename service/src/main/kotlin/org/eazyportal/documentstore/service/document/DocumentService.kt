@@ -18,7 +18,8 @@ import java.util.UUID
 @Service
 class DocumentService(
     private val documentTypeService: DocumentTypeService,
-    private val storedDocumentRepository: StoredDocumentRepository, private val mongoTemplate: MongoTemplate,
+    private val storedDocumentRepository: StoredDocumentRepository,
+    private val mongoTemplate: MongoTemplate,
 ) {
 
     fun saveDocument(document: Document) {

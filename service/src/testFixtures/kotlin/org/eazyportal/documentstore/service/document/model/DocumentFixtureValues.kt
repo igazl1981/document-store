@@ -1,6 +1,7 @@
 package org.eazyportal.documentstore.service.document.model
 
 import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_NAME
+import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_ID
 import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_NAME
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.CommonFixtureValues.METADATA
@@ -14,7 +15,7 @@ object DocumentFixtureValues {
     val DOCUMENT = Document(
         memberId = MEMBER_ID,
         name = DOCUMENT_NAME,
-        documentTypeId = DOCUMENT_TYPE_NAME,
+        documentTypeId = DOCUMENT_TYPE_ID,
         savedFilename = SAVED_FILENAME,
         originalFilename = ORIGINAL_FILENAME,
         metadata = METADATA
