@@ -3,12 +3,14 @@ package org.eazyportal.documentstore.dao.model
 import jakarta.persistence.Id
 import org.bson.types.ObjectId
 import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.DocumentReference
 import java.time.LocalDateTime
 import java.util.UUID
 
 @Document("storedDocuments")
 data class StoredDocumentEntity(
-    val documentType: String,
+    @DocumentReference(lazy = false)
+    val documentType: DocumentTypeEntity,
     var displayName: String,
     val savedFilename: String,
     val originalFilename: String,

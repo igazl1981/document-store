@@ -13,13 +13,13 @@ class DocumentTransformer {
     fun toDocument(documentUploadRequest: DocumentUploadRequest, savedFileName: String, file: MultipartFile) =
         with(documentUploadRequest) {
             Document(
-                memberId, name, documentType, savedFileName, file.originalFilename!!, documentUploadRequest.metadata
+                memberId, name, documentTypeId, savedFileName, file.originalFilename!!, documentUploadRequest.metadata
             )
         }
 
     fun toDto(entity: StoredDocumentEntity): StoredDocumentDto = StoredDocumentDto(
         entity.id.toString(),
-        entity.documentType,
+        entity.documentType.name,
         entity.displayName,
         entity.savedFilename,
         entity.originalFilename,

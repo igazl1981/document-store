@@ -32,7 +32,7 @@ class DocumentTransformerTest {
         val expected = Document(
             memberId = memberId,
             name = "uploaded-file-display-name.txt",
-            documentType = documentType,
+            documentTypeId = documentType,
             savedFilename = savedFileName,
             originalFilename = "mock-uploaded-file.txt",
             metadata = getDocumentMetadata()

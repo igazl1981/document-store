@@ -14,7 +14,7 @@ object DocumentFixtureValues {
     val DOCUMENT = Document(
         memberId = MEMBER_ID,
         name = DOCUMENT_NAME,
-        documentType = DOCUMENT_TYPE_NAME,
+        documentTypeId = DOCUMENT_TYPE_NAME,
         savedFilename = SAVED_FILENAME,
         originalFilename = ORIGINAL_FILENAME,
         metadata = METADATA

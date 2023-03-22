@@ -26,14 +26,15 @@ class FileUploadFacade(
     }
 
     private fun saveFile(documentRequest: DocumentUploadRequest, file: MultipartFile): String =
-        fileHandler.save(documentRequest.memberId, documentRequest.documentType, file)
+        fileHandler.save(documentRequest.memberId, documentRequest.documentTypeId, file)
 
     private fun saveDocument(documentRequest: DocumentUploadRequest, savedFileName: String, file: MultipartFile) {
         try {
             documentService.saveDocument(createDocument(documentRequest, savedFileName, file))
         } catch (e: Exception) {
             logger.error("Failed to save document. Deleting file", e)
-            fileHandler.delete(documentRequest.memberId, documentRequest.documentType, savedFileName)
+            fileHandler.delete(documentRequest.memberId, documentRequest.documentTypeId, savedFileName)
+            throw e
         }
     }
 

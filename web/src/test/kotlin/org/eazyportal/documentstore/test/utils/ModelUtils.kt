@@ -19,7 +19,7 @@ object ModelUtils {
     fun getDocument() = Document(
         memberId = memberId,
         name = "uploaded-file-display-name.txt",
-        documentType = documentType,
+        documentTypeId = documentType,
         savedFilename = "saved-file-name.txt",
         originalFilename = "mock-uploaded-file.txt",
         metadata = getDocumentMetadata()
@@ -31,7 +31,7 @@ object ModelUtils {
     fun getDocumentUploadRequest() = DocumentUploadRequest(
         memberId = memberId,
         name = "uploaded-file-display-name.txt",
-        documentType = documentType,
+        documentTypeId = documentType,
         metadata = getDocumentMetadata()
     )
 
