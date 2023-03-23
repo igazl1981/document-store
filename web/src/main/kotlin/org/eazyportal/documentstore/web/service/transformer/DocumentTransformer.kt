@@ -13,7 +13,7 @@ class DocumentTransformer {
     fun toDocument(documentUploadRequest: DocumentUploadRequest, savedFileName: String, file: MultipartFile) =
         with(documentUploadRequest) {
             Document(
-                memberId, name, documentTypeId, savedFileName, file.originalFilename!!, documentUploadRequest.metadata
+                memberId, name, documentTypeId, savedFileName, file.originalFilename!!, documentUploadRequest.metadata?.toMutableMap()
             )
         }
 

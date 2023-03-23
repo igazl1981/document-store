@@ -15,6 +15,6 @@ object CommonFixtureValues {
     val TAX_RETURN_PERIOD_META = mapOf(
         "year" to "2023", "quarter" to "2", "month" to "APRIL"
     )
-    val METADATA = mapOf("TaxReturnPeriod" to TAX_RETURN_PERIOD_META)
+    val METADATA: MutableMap<String, Any> = mutableMapOf("TaxReturnPeriod" to TAX_RETURN_PERIOD_META)
 
 }

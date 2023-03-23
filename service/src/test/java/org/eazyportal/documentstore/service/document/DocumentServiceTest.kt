@@ -123,6 +123,16 @@ class DocumentServiceTest {
         verifyNoInteractions(storedDocumentRepository, documentTypeService, mongoTemplate)
     }
 
+    @Test
+    fun `test saveDocument should call repository`() {
+        whenever(storedDocumentRepository.save(STORED_DOCUMENT)).thenReturn(STORED_DOCUMENT)
+
+        val result = documentService.saveDocument(STORED_DOCUMENT)
+
+        verifyNoInteractions(documentTypeService, mongoTemplate)
+        assertThat(result).isEqualTo(STORED_DOCUMENT)
+    }
+
     private fun getRecursionConfig() =
         RecursiveComparisonConfiguration.builder().withIgnoredFields("id", "modifiedAt", "uploadedAt").build()
 

@@ -35,7 +35,7 @@ class DocumentService(
             status = PENDING,
             owner = document.memberId,
             modifiedBy = document.memberId,
-            metadata = document.metadata
+            metadata = document.metadata?.toMutableMap()
         )
 
         storedDocumentRepository.save(storedDocument)
@@ -55,6 +55,9 @@ class DocumentService(
         val id = getIdFromString(documentId)
         return findDocument(id, documentId)
     }
+
+    fun saveDocument(storedDocumentEntity: StoredDocumentEntity): StoredDocumentEntity =
+        storedDocumentRepository.save(storedDocumentEntity)
 
     private fun findDocument(id: ObjectId, documentId: String): StoredDocumentEntity =
         storedDocumentRepository.findById(id).orElseThrow { DocumentNotFoundException(documentId) }
