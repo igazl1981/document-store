@@ -20,7 +20,7 @@ data class StoredDocumentEntity(
 
     @Id
     val id: ObjectId = ObjectId.get(),
-    var metadata: Map<String, Any>? = null,
+    var metadata: MutableMap<String, Any>? = null,
     var modifiedAt: LocalDateTime = LocalDateTime.now(),
     val uploadedAt: LocalDateTime = LocalDateTime.now(),
 )

@@ -6,6 +6,7 @@ import org.eazyportal.documentstore.web.service.DocumentRetrieveFacade
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -38,5 +39,13 @@ class StoreDocumentRetrieveController(
     ): Page<StoredDocument> {
         val filterOptions = parameterParser.getFilterOptions(requestParameters)
         return documentRetrieveFacade.getAllDocuments(memberId, filterOptions, pageable)
+    }
+
+    @GetMapping("/{documentId}")
+    fun getDocumentById(
+        @PathVariable
+        documentId: String,
+    ): StoredDocument {
+        return documentRetrieveFacade.getDocument(documentId)
     }
 }

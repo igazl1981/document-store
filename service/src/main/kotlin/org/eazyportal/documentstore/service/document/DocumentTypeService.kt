@@ -4,6 +4,7 @@ import org.bson.types.ObjectId
 import org.eazyportal.documentstore.dao.model.DocumentTypeEntity
 import org.eazyportal.documentstore.dao.repository.DocumentTypeRepository
 import org.eazyportal.documentstore.service.document.exception.DocumentTypeNotFoundException
+import org.eazyportal.documentstore.service.document.exception.InvalidIdRepresentationException
 import org.eazyportal.documentstore.service.document.model.Type
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -13,7 +14,10 @@ class DocumentTypeService(private val documentTypeRepository: DocumentTypeReposi
 
     fun getAll(): List<DocumentTypeEntity> = documentTypeRepository.findAll()
 
-    fun getById(id: String): DocumentTypeEntity? = documentTypeRepository.findById(ObjectId(id)).orElse(null)
+    fun getById(id: String): DocumentTypeEntity? = documentTypeRepository.findById(getIdFromString(id)).orElse(null)
+
+    private fun getIdFromString(id: String) =
+        id.takeIf(ObjectId::isValid)?.let(::ObjectId) ?: throw InvalidIdRepresentationException(id)
 
     @Transactional
     fun add(type: Type): DocumentTypeEntity {

@@ -1,9 +1,12 @@
 package org.eazyportal.documentstore.service.document
 
+import org.bson.types.ObjectId
 import org.eazyportal.documentstore.dao.model.DocumentStatus.PENDING
 import org.eazyportal.documentstore.dao.model.DocumentTypeEntity
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntity
 import org.eazyportal.documentstore.dao.repository.StoredDocumentRepository
+import org.eazyportal.documentstore.service.document.exception.DocumentNotFoundException
+import org.eazyportal.documentstore.service.document.exception.InvalidIdRepresentationException
 import org.eazyportal.documentstore.service.document.exception.MissingDocumentTypeException
 import org.eazyportal.documentstore.service.document.model.Document
 import org.springframework.data.domain.Page
@@ -32,7 +35,7 @@ class DocumentService(
             status = PENDING,
             owner = document.memberId,
             modifiedBy = document.memberId,
-            metadata = document.metadata
+            metadata = document.metadata?.toMutableMap()
         )
 
         storedDocumentRepository.save(storedDocument)
@@ -47,6 +50,20 @@ class DocumentService(
             mongoTemplate.count(query.limit(-1).skip(-1), StoredDocumentEntity::class.java)
         }
     }
+
+    fun getDocument(documentId: String): StoredDocumentEntity {
+        val id = getIdFromString(documentId)
+        return findDocument(id, documentId)
+    }
+
+    fun saveDocument(storedDocumentEntity: StoredDocumentEntity): StoredDocumentEntity =
+        storedDocumentRepository.save(storedDocumentEntity)
+
+    private fun findDocument(id: ObjectId, documentId: String): StoredDocumentEntity =
+        storedDocumentRepository.findById(id).orElseThrow { DocumentNotFoundException(documentId) }
+
+    private fun getIdFromString(documentId: String) =
+        documentId.takeIf(ObjectId::isValid)?.let(::ObjectId) ?: throw InvalidIdRepresentationException(documentId)
 
     private fun findDocumentTypeEntity(documentTypeId: String): DocumentTypeEntity {
         return documentTypeService.getById(documentTypeId) ?: throw MissingDocumentTypeException(documentTypeId)

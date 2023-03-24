@@ -4,6 +4,8 @@ import java.util.UUID
 
 object CommonFixtureValues {
 
+    const val INVALID_ID = "INVALID"
+    const val DOCUMENT_ID_STRING = "6419fe9263230d14cbbaf826"
     const val DOCUMENT_NAME = "document-name"
     const val DOCUMENT_TYPE_NAME = "document-type"
     const val DOCUMENT_TYPE_ID = "6418a7917f9f210986d50ed2"
@@ -13,6 +15,6 @@ object CommonFixtureValues {
     val TAX_RETURN_PERIOD_META = mapOf(
         "year" to "2023", "quarter" to "2", "month" to "APRIL"
     )
-    val METADATA = mapOf("TaxReturnPeriod" to TAX_RETURN_PERIOD_META)
+    val METADATA: MutableMap<String, Any> = mutableMapOf("TaxReturnPeriod" to TAX_RETURN_PERIOD_META)
 
 }

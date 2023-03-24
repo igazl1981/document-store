@@ -2,15 +2,21 @@ package org.eazyportal.documentstore.service.document
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration
+import org.bson.types.ObjectId
+import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_ID_STRING
 import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_TYPE_ID
+import org.eazyportal.documentstore.CommonFixtureValues.INVALID_ID
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.dao.model.DocumentTypeEntityFixtureValues.DOCUMENT_TYPE
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntity
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.DEFAULT_PAGEABLE
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.STORED_DOCUMENT
 import org.eazyportal.documentstore.dao.repository.StoredDocumentRepository
+import org.eazyportal.documentstore.service.document.exception.DocumentNotFoundException
+import org.eazyportal.documentstore.service.document.exception.InvalidIdRepresentationException
 import org.eazyportal.documentstore.service.document.model.DocumentFixtureValues.DOCUMENT
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -23,6 +29,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import java.time.LocalDateTime
+import java.util.Optional
 
 @ExtendWith(MockitoExtension::class)
 class DocumentServiceTest {
@@ -59,7 +66,8 @@ class DocumentServiceTest {
     fun `test getAllDocuments should use query with owner only when filterOptions is empty`() {
         val query = Query(Criteria.where("owner").`is`(MEMBER_ID))
         val storedDocuments = listOf(STORED_DOCUMENT)
-        whenever(mongoTemplate.find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java)).thenReturn(storedDocuments)
+        whenever(mongoTemplate.find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java))
+            .thenReturn(storedDocuments)
 
         val result = documentService.getAllDocuments(MEMBER_ID, emptyMap(), DEFAULT_PAGEABLE)
 
@@ -74,7 +82,8 @@ class DocumentServiceTest {
         val query = Query(Criteria.where("owner").`is`(MEMBER_ID).andOperator(Criteria.where("filter1").`is`("value1")))
         val storedDocuments = listOf(STORED_DOCUMENT)
         val filterOptions = mapOf("filter1" to "value1")
-        whenever(mongoTemplate.find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java)).thenReturn(storedDocuments)
+        whenever(mongoTemplate.find(query.with(DEFAULT_PAGEABLE), StoredDocumentEntity::class.java))
+            .thenReturn(storedDocuments)
 
         val result = documentService.getAllDocuments(MEMBER_ID, filterOptions, DEFAULT_PAGEABLE)
 
@@ -82,6 +91,46 @@ class DocumentServiceTest {
         verifyNoInteractions(documentTypeService, storedDocumentRepository)
         assertThat(result.content).isEqualTo(storedDocuments)
         assertThat(result.pageable).isEqualTo(DEFAULT_PAGEABLE)
+    }
+
+    @Test
+    fun `test getDocument should return document`() {
+        whenever(storedDocumentRepository.findById(ObjectId(DOCUMENT_ID_STRING)))
+            .thenReturn(Optional.of(STORED_DOCUMENT))
+
+        val result = documentService.getDocument(DOCUMENT_ID_STRING)
+
+        verify(storedDocumentRepository).findById(ObjectId(DOCUMENT_ID_STRING))
+        verifyNoInteractions(documentTypeService, mongoTemplate)
+        assertThat(result).isEqualTo(STORED_DOCUMENT)
+    }
+
+    @Test
+    fun `test getDocument should throw exception when document is not found`() {
+        whenever(storedDocumentRepository.findById(ObjectId(DOCUMENT_ID_STRING)))
+            .thenReturn(Optional.empty())
+
+        assertThrows<DocumentNotFoundException> {  documentService.getDocument(DOCUMENT_ID_STRING) }
+
+        verify(storedDocumentRepository).findById(ObjectId(DOCUMENT_ID_STRING))
+        verifyNoInteractions(documentTypeService, mongoTemplate)
+    }
+
+    @Test
+    fun `test getDocument should throw exception when document ID is invalid`() {
+        assertThrows<InvalidIdRepresentationException> {  documentService.getDocument(INVALID_ID) }
+
+        verifyNoInteractions(storedDocumentRepository, documentTypeService, mongoTemplate)
+    }
+
+    @Test
+    fun `test saveDocument should call repository`() {
+        whenever(storedDocumentRepository.save(STORED_DOCUMENT)).thenReturn(STORED_DOCUMENT)
+
+        val result = documentService.saveDocument(STORED_DOCUMENT)
+
+        verifyNoInteractions(documentTypeService, mongoTemplate)
+        assertThat(result).isEqualTo(STORED_DOCUMENT)
     }
 
     private fun getRecursionConfig() =

@@ -25,7 +25,7 @@ object StoredDocumentEntityFixtureValues {
         owner = MEMBER_ID,
         modifiedBy = MEMBER_ID,
         id = ObjectId.getSmallestWithDate(Date.from(Instant.parse("2023-03-04T10:00:00Z"))),
-        metadata = METADATA,
+        metadata = METADATA.toMutableMap(),
         modifiedAt = LocalDateTime.parse("2023-03-04T11:00:00"),
         uploadedAt = LocalDateTime.parse("2023-03-04T10:00:00"),
     )

@@ -4,6 +4,7 @@ import org.eazyportal.documentstore.dao.model.DocumentStatus
 import org.eazyportal.documentstore.service.document.model.Document
 import org.eazyportal.documentstore.web.rest.model.DocumentType
 import org.eazyportal.documentstore.web.rest.model.DocumentTypeCreateRequest
+import org.eazyportal.documentstore.web.rest.model.DocumentUpdateRequest
 import org.eazyportal.documentstore.web.rest.model.DocumentUploadRequest
 import org.eazyportal.documentstore.web.rest.model.StoredDocument
 import org.springframework.mock.web.MockMultipartFile
@@ -15,6 +16,11 @@ object ModelUtils {
     const val documentType = "document-type"
     const val documentTypeId = "6418a7917f9f210986d50ed2"
     val memberId: UUID = UUID.fromString("0b1e0c6c-710b-4641-8530-ee9beb760db9")
+
+    fun getDocumentUpdateRequest() = DocumentUpdateRequest(
+        displayName = "NewDisplayName",
+        metadata = null
+    )
 
     fun getDocument() = Document(
         memberId = memberId,

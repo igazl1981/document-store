@@ -1,6 +1,7 @@
 package org.eazyportal.documentstore.web.rest.controller
 
 import org.assertj.core.api.Assertions.assertThat
+import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_ID_STRING
 import org.eazyportal.documentstore.CommonFixtureValues.MEMBER_ID
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.DEFAULT_PAGEABLE
 import org.eazyportal.documentstore.test.utils.ModelUtils.getStoredDocument
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.springframework.data.domain.PageImpl
 
@@ -42,5 +44,16 @@ class StoreDocumentRetrieveControllerTest {
         verify(parameterParser).getFilterOptions(requestParameters)
         verify(documentRetrieveFacade).getAllDocuments(MEMBER_ID, filterOptions, DEFAULT_PAGEABLE)
         assertThat(result).isEqualTo(allPagedDocument)
+    }
+
+    @Test
+    fun `test getDocumentById`() {
+        whenever(documentRetrieveFacade.getDocument(DOCUMENT_ID_STRING)).thenReturn(getStoredDocument())
+
+        val result = storeDocumentRetrieveController.getDocumentById(DOCUMENT_ID_STRING)
+
+        verify(documentRetrieveFacade).getDocument(DOCUMENT_ID_STRING)
+        verifyNoInteractions(parameterParser)
+        assertThat(result).isEqualTo(getStoredDocument())
     }
 }

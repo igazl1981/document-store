@@ -1,6 +1,7 @@
 package org.eazyportal.documentstore.web.service
 
 import org.assertj.core.api.Assertions.assertThat
+import org.eazyportal.documentstore.CommonFixtureValues.DOCUMENT_ID_STRING
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.DEFAULT_PAGEABLE
 import org.eazyportal.documentstore.dao.model.StoredDocumentEntityFixtureValues.STORED_DOCUMENT
 import org.eazyportal.documentstore.service.document.DocumentService
@@ -42,5 +43,17 @@ class DocumentRetrieveFacadeTest {
         verify(documentService).getAllDocuments(memberId, filterOptions, DEFAULT_PAGEABLE)
         verify(documentTransformer).toDto(STORED_DOCUMENT)
         assertThat(result.content).isEqualTo(listOf(getStoredDocument()))
+    }
+
+    @Test
+    fun `test getDocument`() {
+        whenever(documentService.getDocument(DOCUMENT_ID_STRING)).thenReturn(STORED_DOCUMENT)
+        whenever(documentTransformer.toDto(STORED_DOCUMENT)).thenReturn(getStoredDocument())
+
+        val result = documentRetrieveFacade.getDocument(DOCUMENT_ID_STRING)
+
+        verify(documentService).getDocument(DOCUMENT_ID_STRING)
+        verify(documentTransformer).toDto(STORED_DOCUMENT)
+        assertThat(result).isEqualTo(getStoredDocument())
     }
 }

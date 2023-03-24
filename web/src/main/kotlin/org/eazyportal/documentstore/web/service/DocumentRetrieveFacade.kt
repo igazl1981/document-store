@@ -15,4 +15,7 @@ class DocumentRetrieveFacade(
 
     fun getAllDocuments(memberId: UUID, filterOptions: Map<String, String>, pageable: Pageable): Page<StoredDocument> =
         documentService.getAllDocuments(memberId, filterOptions, pageable).map(documentTransformer::toDto)
+
+    fun getDocument(documentId: String): StoredDocument =
+        documentService.getDocument(documentId).let(documentTransformer::toDto)
 }
