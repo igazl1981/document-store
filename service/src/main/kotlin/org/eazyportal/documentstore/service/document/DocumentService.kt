@@ -44,11 +44,16 @@ class DocumentService(
     fun getAllDocuments(
         memberId: UUID, filterOptions: Map<String, String>, pageable: Pageable
     ): Page<StoredDocumentEntity> {
-        val query = getQuery(memberId, filterOptions)
+        val query = getQueryForFiltering(memberId, filterOptions)
         val pagedDocuments = findPageOfStoredDocumentEntities(query, pageable)
         return PageableExecutionUtils.getPage(pagedDocuments, pageable) {
             mongoTemplate.count(query.limit(-1).skip(-1), StoredDocumentEntity::class.java)
         }
+    }
+
+    fun countByType(documentType: DocumentTypeEntity): Long {
+        val query = getDocumentTypeQuery(documentType)
+        return mongoTemplate.count(query.limit(-1).skip(-1), StoredDocumentEntity::class.java)
     }
 
     fun getDocument(documentId: String): StoredDocumentEntity {
@@ -58,6 +63,9 @@ class DocumentService(
 
     fun saveDocument(storedDocumentEntity: StoredDocumentEntity): StoredDocumentEntity =
         storedDocumentRepository.save(storedDocumentEntity)
+
+    private fun getDocumentTypeQuery(documentType: DocumentTypeEntity) =
+        Query(Criteria.where("documentType").`is`(documentType))
 
     private fun findDocument(id: ObjectId, documentId: String): StoredDocumentEntity =
         storedDocumentRepository.findById(id).orElseThrow { DocumentNotFoundException(documentId) }
@@ -73,7 +81,7 @@ class DocumentService(
         query: Query, pageable: Pageable
     ): List<StoredDocumentEntity> = mongoTemplate.find(query.with(pageable), StoredDocumentEntity::class.java)
 
-    private fun getQuery(memberId: UUID, filterOptions: Map<String, String>): Query {
+    private fun getQueryForFiltering(memberId: UUID, filterOptions: Map<String, String>): Query {
         val filter = getCompleteFilter(memberId, filterOptions)
         return Query(filter)
     }

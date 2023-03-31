@@ -117,4 +117,12 @@ class DocumentTypeServiceTest {
         verify(documentTypeRepository).findById(id)
         verifyNoMoreInteractions(documentTypeRepository)
     }
+
+    @Test
+    fun `test delete should call repository`() {
+
+        documentTypeService.delete(DOCUMENT_TYPE)
+
+        verify(documentTypeRepository).delete(DOCUMENT_TYPE)
+    }
 }

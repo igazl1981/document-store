@@ -5,6 +5,8 @@ import org.eazyportal.documentstore.web.rest.model.DocumentTypeCreateRequest
 import org.eazyportal.documentstore.web.rest.model.DocumentTypeListResponse
 import org.eazyportal.documentstore.web.service.DocumentTypeFacade
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.HttpStatus.NO_CONTENT
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -39,6 +41,12 @@ class DocumentTypeController(private val documentTypeFacade: DocumentTypeFacade)
     @PutMapping("/{id}")
     fun update(@PathVariable id: String, @RequestBody documentTypeCreateRequest: DocumentTypeCreateRequest): DocumentType {
         return documentTypeFacade.update(id, documentTypeCreateRequest)
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(NO_CONTENT)
+    fun delete(@PathVariable id: String) {
+        documentTypeFacade.delete(id)
     }
 
 }

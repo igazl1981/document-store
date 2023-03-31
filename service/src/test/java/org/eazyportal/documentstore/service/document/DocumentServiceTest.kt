@@ -133,6 +133,18 @@ class DocumentServiceTest {
         assertThat(result).isEqualTo(STORED_DOCUMENT)
     }
 
+    @Test
+    fun `test countByType should call template`() {
+        val query = Query(Criteria.where("documentType").`is`(DOCUMENT_TYPE)).limit(-1).skip(-1)
+        whenever(mongoTemplate.count(query, StoredDocumentEntity::class.java)).thenReturn(1)
+
+        val result = documentService.countByType(DOCUMENT_TYPE)
+
+        verify(mongoTemplate).count(query, StoredDocumentEntity::class.java)
+        verifyNoInteractions(documentTypeService)
+        assertThat(result).isEqualTo(1)
+    }
+
     private fun getRecursionConfig() =
         RecursiveComparisonConfiguration.builder().withIgnoredFields("id", "modifiedAt", "uploadedAt").build()
 

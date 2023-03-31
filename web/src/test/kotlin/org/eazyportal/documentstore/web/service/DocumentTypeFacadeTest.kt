@@ -2,7 +2,10 @@ package org.eazyportal.documentstore.web.service
 
 import org.assertj.core.api.Assertions
 import org.eazyportal.documentstore.dao.model.DocumentTypeEntityFixtureValues.DOCUMENT_TYPE
+import org.eazyportal.documentstore.service.document.DocumentService
 import org.eazyportal.documentstore.service.document.DocumentTypeService
+import org.eazyportal.documentstore.service.document.exception.DocumentTypeHasAssignedDocumentsException
+import org.eazyportal.documentstore.service.document.exception.MissingDocumentTypeException
 import org.eazyportal.documentstore.service.document.model.Type
 import org.eazyportal.documentstore.test.utils.ModelUtils.documentType
 import org.eazyportal.documentstore.test.utils.ModelUtils.documentTypeId
@@ -11,6 +14,7 @@ import org.eazyportal.documentstore.test.utils.ModelUtils.getDocumentTypeCreateR
 import org.eazyportal.documentstore.web.service.transformer.DocumentTypeTransformer
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -21,6 +25,9 @@ import org.mockito.kotlin.whenever
 
 @ExtendWith(MockitoExtension::class)
 class DocumentTypeFacadeTest {
+
+    @Mock
+    private lateinit var documentService: DocumentService
 
     @Mock
     private lateinit var documentTypeService: DocumentTypeService
@@ -96,6 +103,41 @@ class DocumentTypeFacadeTest {
         verify(documentTypeTransformer).toDto(DOCUMENT_TYPE)
         val expected = getDocumentType()
         Assertions.assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test delete should throw exception when type not found`() {
+        whenever(documentTypeService.getById(documentTypeId)).thenReturn(null)
+
+        assertThrows<MissingDocumentTypeException> { documentTypeFacade.delete(documentTypeId) }
+
+        verify(documentTypeService).getById(documentTypeId)
+        verifyNoInteractions(documentTypeTransformer, documentService)
+    }
+
+    @Test
+    fun `test delete should throw exception when documentType has assigned documents`() {
+        whenever(documentTypeService.getById(documentTypeId)).thenReturn(DOCUMENT_TYPE)
+        whenever(documentService.countByType(DOCUMENT_TYPE)).thenReturn(1)
+
+        assertThrows<DocumentTypeHasAssignedDocumentsException> { documentTypeFacade.delete(documentTypeId) }
+
+        verify(documentTypeService).getById(documentTypeId)
+        verify(documentService).countByType(DOCUMENT_TYPE)
+        verifyNoInteractions(documentTypeTransformer)
+    }
+
+    @Test
+    fun `test delete should call repository to delete when there is no assigned document`() {
+        whenever(documentTypeService.getById(documentTypeId)).thenReturn(DOCUMENT_TYPE)
+        whenever(documentService.countByType(DOCUMENT_TYPE)).thenReturn(0)
+
+        documentTypeFacade.delete(documentTypeId)
+
+        verify(documentTypeService).getById(documentTypeId)
+        verify(documentService).countByType(DOCUMENT_TYPE)
+        verify(documentTypeService).delete(DOCUMENT_TYPE)
+        verifyNoInteractions(documentTypeTransformer)
     }
 
 }

@@ -16,9 +16,6 @@ class DocumentTypeService(private val documentTypeRepository: DocumentTypeReposi
 
     fun getById(id: String): DocumentTypeEntity? = documentTypeRepository.findById(getIdFromString(id)).orElse(null)
 
-    private fun getIdFromString(id: String) =
-        id.takeIf(ObjectId::isValid)?.let(::ObjectId) ?: throw InvalidIdRepresentationException(id)
-
     @Transactional
     fun add(type: Type): DocumentTypeEntity {
         return insert(type)
@@ -28,6 +25,14 @@ class DocumentTypeService(private val documentTypeRepository: DocumentTypeReposi
     fun update(id: String, type: Type): DocumentTypeEntity {
         return getById(id)?.let { update(it, type) } ?: throw DocumentTypeNotFoundException(id)
     }
+
+    @Transactional
+    fun delete(documentTypeEntity: DocumentTypeEntity) {
+        documentTypeRepository.delete(documentTypeEntity)
+    }
+
+    private fun getIdFromString(id: String) =
+        id.takeIf(ObjectId::isValid)?.let(::ObjectId) ?: throw InvalidIdRepresentationException(id)
 
     private fun insert(type: Type): DocumentTypeEntity {
         val newEntity = DocumentTypeEntity(type.name)

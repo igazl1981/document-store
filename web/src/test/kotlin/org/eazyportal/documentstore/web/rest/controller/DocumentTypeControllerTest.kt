@@ -69,4 +69,12 @@ class DocumentTypeControllerTest {
         val expected = getDocumentType()
         Assertions.assertThat(result).isEqualTo(expected)
     }
+
+    @Test
+    fun `test delete`() {
+
+        documentTypeController.delete(documentTypeId)
+
+        verify(documentTypeFacade).delete(documentTypeId)
+    }
 }
